@@ -1,5 +1,17 @@
-*.log
-data/
-logs/
+# Katalogi
 venv/
+logs/
+data/
 debug/
+__pycache__/
+*.pyc
+
+# Pliki środowiskowe
+.env
+.venv
+.DS_Store
+
+# Inne
+*.log
+chromedriver
+*.tar.gz

@@ -85,6 +85,20 @@ Usage Examples:
     )
     
     parser.add_argument(
+        '--since',
+        type=str,
+        default=None,
+        help='Lower bound date (YYYY-MM-DD) for tweets, e.g. 2023-01-01'
+    )
+    
+    parser.add_argument(
+        '--until',
+        type=str,
+        default=None,
+        help='Upper bound date (YYYY-MM-DD) for tweets, e.g. 2023-12-31'
+    )
+    
+    parser.add_argument(
         '--delay',
         type=float,
         default=5.0,
@@ -437,7 +451,7 @@ def scrape_nitter_with_selenium(url, max_tweets=100, page_delay=3.0):
     
     return all_tweets
 
-def try_different_nitter_instances(hashtag, max_tweets=100, page_delay=3.0):
+def try_different_nitter_instances(hashtag, max_tweets=100, page_delay=3.0, since=None, until=None):
     """
     Tries different, dynamically fetched Nitter instances until a working one is found.
     """
@@ -447,6 +461,10 @@ def try_different_nitter_instances(hashtag, max_tweets=100, page_delay=3.0):
     for instance in instances:
         print(f"\nAttempting to use instance: {instance}")
         search_url = f"https://{instance}/search?f=tweets&q=%23{hashtag}"
+        if since:
+            search_url += f"&since={since}"
+        if until:
+            search_url += f"&until={until}"
         
         try:
             tweets = scrape_nitter_with_selenium(search_url, max_tweets, page_delay)
@@ -464,7 +482,7 @@ def try_different_nitter_instances(hashtag, max_tweets=100, page_delay=3.0):
     
     return all_tweets
 
-def scrape_multiple_hashtags(hashtags, max_tweets=100, delay=5.0, page_delay=3.0):
+def scrape_multiple_hashtags(hashtags, max_tweets=100, delay=5.0, page_delay=3.0, since=None, until=None):
     """
     Fetches tweets for multiple hashtags
     """
@@ -482,7 +500,9 @@ def scrape_multiple_hashtags(hashtags, max_tweets=100, delay=5.0, page_delay=3.0
             tweets = try_different_nitter_instances(
                 hashtag, 
                 max_tweets, 
-                page_delay
+                page_delay,
+                since,
+                until
             )
             
             if tweets:
@@ -600,7 +620,9 @@ def main():
             hashtags=args.hashtags,
             max_tweets=args.max_tweets,
             delay=args.delay,
-            page_delay=args.page_delay
+            page_delay=args.page_delay,
+            since=args.since,
+            until=args.until
         )
         total_tweets = sum(len(v) for v in results.values())
         

@@ -14,7 +14,7 @@ The project requires a standard Python environment and an up-to-date browser ins
 1.  **Clone or download the repository:**
 
     ```bash
-    git clone [https://github.com/gfxmz/nitter-scraper.git](https://github.com/gfxmz/nitter-scraper.git)
+    git clone https://github.com/gfxmz/nitter-scraper.git
     cd nitter-scraper
     ```
 
@@ -33,30 +33,46 @@ The script is executed via the command line, accepting a list of hashtags as pos
 ```bash
 python nitter-scraper.py <HASHTAG1> <HASHTAG2> [OPTIONS]
 ```
+
+### Options
+
+| Argument | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `hashtags` | Positional | N/A | List of hashtags to search for (without the # sign) |
+| `--max-tweets` | Integer | `100` | Maximum number of tweets for each hashtag |
+| `--output-dir` | String | `data` | Target directory for CSV files |
+| `--filename-prefix` | String | `tweets` | Prefix for the output CSV filenames (e.g., your last name) |
+| `--since` | String | `None` | Lower bound date (YYYY-MM-DD) for tweets, e.g. 2023-01-01 |
+| `--until` | String | `None` | Upper bound date (YYYY-MM-DD) for tweets, e.g. 2023-12-31 |
+| `--delay` | Float | `5.0` | Delay in seconds between hashtags |
+| `--show-samples` | Integer | `3` | Number of sample tweets to display in console |
+| `--page-delay` | Float | `3.0` | Delay between pages in seconds |
+
 ### Usage Examples
 
-This command will fetch 100 tweets for #ukraine and 100 for #russia.
-
+Fetch 100 tweets for #ukraine and 100 for #russia:
 ```bash
 python nitter-scraper.py ukraine russia
 ```
 
-Custom Limit and File Prefix
-
+Fetch posts with a custom limit and specific file prefix:
 ```bash
 python nitter-scraper.py ukraine russia --max-tweets 500 --filename-prefix nawrocki
 ```
 
-Save the resulting CSV files to an output/ directory instead of the default data/.
+Fetch historical tweets using date filters (from Jan 1, 2023 to Dec 31, 2023):
+```bash
+python nitter-scraper.py ukraine --since 2023-01-01 --until 2023-12-31
+```
 
+Save the resulting CSV files to an `output/` directory instead of the default `data/`:
 ```bash
 python nitter-scraper.py poland --output-dir output
 ```
 
-### Output data format 
+## Output data format 
 
 The script generates a separate CSV file for each hashtag in the specified output directory.
-
 
 ### Filename Format Breakdown
 
